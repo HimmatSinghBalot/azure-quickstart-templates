@@ -216,7 +216,7 @@
             "metadata": {
                 "description": "The Storage Account Key of the Storage Account containing the Hash File and Certificate."
             },
-            "defaultValue": ""
+            "defaultValue": "KEY_GOES_HERE"
         },
         "credsCertificateUri": {
             "type": "string",
@@ -418,7 +418,7 @@
                         },
                         "protectedSettings": {
                             "storageAccountName": "[parameters('credsStorageAccountName')]",
-                            "storageAccountKey": "[parameters('credsStorageAccountKey')]"
+                            "storageAccountKey": "[listKeys(concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('credsStorageAccountResourceGroup'),'/providers/','Microsoft.Storage/storageAccounts/', parameters('credsStorageAccountName')),'2015-05-01-preview').key1]"
                         }
                     }
                 }
