@@ -211,13 +211,6 @@
             },
             "defaultValue": "devopsautocloudstore"
         },
-        "credsStorageAccountKey": {
-            "type": "string",
-            "metadata": {
-                "description": "The Storage Account Key of the Storage Account containing the Hash File and Certificate."
-            },
-            "defaultValue": "KEY_GOES_HERE"
-        },
         "credsCertificateUri": {
             "type": "string",
             "metadata": {
@@ -255,7 +248,6 @@
         }
     },
     "variables": {
-        "accountId": "[concat('/subscriptions/',subscription().subscriptionId,'/resourceGroups/',parameters('credsStorageAccountResourceGroup'),'/providers/','Microsoft.Storage/storageAccounts/', parameters('credsStorageAccountName'))]"
     },
     "resources": [
         {
