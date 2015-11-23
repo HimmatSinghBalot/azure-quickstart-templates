@@ -211,24 +211,38 @@
             },
             "defaultValue": "devopsautocloudstore"
         },
-        "credsCertificateUri": {
+        "credsCertFileUri": {
             "type": "string",
             "metadata": {
                 "description": "The URL of the Certificate Used to Decrypt the Secured Creds Hash Text File."
             },
-            "defaultValue": "https://devopsautocloudstore.blob.core.windows.net/deploycreds/AzureSecuredResources.pfx"
+            "defaultValue": "https://devopsautocloudstore.blob.core.windows.net/deploycreds/AzureSecuredCredentials.pfx"
         },
-        "credsHashTextFileUri": {
+        "credsCertFileName": {
+            "type": "string",
+            "metadata": {
+                "description": "The Name of the Certificate Used to Decrypt the Secured Creds Hash Text File."
+            },
+            "defaultValue": "AzureSecuredCredentials.pfx"
+        },
+        "credsTextFileUri": {
             "type": "string",
             "metadata": {
                 "description": "The URL of the Secured Creds Hash Text File."
             },
-            "defaultValue": "https://devopsautocloudstore.blob.core.windows.net/deploycreds/SecureCredsHash.txt"
+            "defaultValue": "https://devopsautocloudstore.blob.core.windows.net/deploycreds/AzureSecuredCredentials.txt"
+        },
+        "credsTextFileName": {
+            "type": "string",
+            "metadata": {
+                "description": "The Name of the Secured Creds Hash Text File."
+            },
+            "defaultValue": "AzureSecuredCredentials.txt"
         },
         "winSandboxCustomConfigsScriptUri": {
             "type": "string",
             "metadata": {
-                "description": "The URL of the Secured Creds Hash Text File."
+                "description": "The URL of the Windows Sandbox Custom Script."
             },
             "defaultValue": "https://devopsautocloudstore.blob.core.windows.net/deploycreds/deploy_sandbox/WINSANDBOX-Custom-Configs.ps1"
         },
@@ -402,11 +416,11 @@
                         "autoUpgradeMinorVersion": true,
                         "settings": {
                             "fileUris": [
-                                "[parameters('credsCertificateUri')]",
-                                "[parameters('credsHashTextFileUri')]",
+                                "[parameters('credsCertFileUri')]",
+                                "[parameters('credsTextFileUri')]",
                                 "[parameters('winSandboxCustomConfigsScriptUri')]"
                             ],
-                            "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File .\\deploy_sandbox\\', parameters('winSandboxCustomConfigsScriptName'))]"
+                            "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File .\\deploy_sandbox\\', parameters('winSandboxCustomConfigsScriptName'), ' -CredsTextFileName ', parameters('credsTextFileName'), ' -CredsCertFileName ', parameters('credsCertFileName'), ' -Verbose ')]"
                         },
                         "protectedSettings": {
                             "storageAccountName": "[parameters('credsStorageAccountName')]",
