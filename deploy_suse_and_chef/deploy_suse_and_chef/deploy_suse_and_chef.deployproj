@@ -34,7 +34,7 @@
     </None>
     <Content Include="Scripts\Deploy-AzureResourceGroup.ps1" />
     <Content Include="Templates\deploy_suse_and_chef.json" />
-    <None Include="Templates\deploy_suse_and_chef.param.dev.json" />
+    <None Include="Templates\deploy_suse_and_chef.param.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tools\AzCopy.exe" />
