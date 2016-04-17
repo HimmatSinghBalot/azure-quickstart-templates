@@ -120,30 +120,31 @@
             }
         }
     },
-    "variables": {
-        "location": "[parameters('location')]",
-        "newStorageAccountName": "[parameters('newStorageAccountName')]",
-        "newStorageAccountType": "[parameters('newStorageAccountType')]",
-        "adminUsername": "[parameters('adminUsername')]",
-        "adminPassword": "[parameters('adminPassword')]",
-        "windowsOSVersion": "[parameters('WindowsOSVersion')]",
-        "VMName": "[parameters('VMName')]",
-        "VMSize": "[parameters('VMSize')]",
-        "OSDiskName": "[concat(variables('VMName'),'-OSDisk')]",
-        "vmStorageAccountContainerName": "vhds",
-        "imagePublisher": "MicrosoftWindowsServer",
-        "imageOffer": "WindowsServer",
-        "nicName": "[concat(variables('VMName'), 'NetworkInterface')]",
-        "addressPrefix": "[parameters('addressPrefix')]",
-        "subnetName": "TestVMSubnet",
-        "subnetPrefix": "[parameters('subnetPrefix')]",
-        "vmPublicIPAddressName": "[parameters('vmPublicIPAddressName')]",
-        "virtualNetworkName": "TestVNET",
-        "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
-        "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
-        "CustomWin2012R2PSScriptAzureStorageURI": "[parameters('CustomWin2012R2PSScriptAzureStorageURI')]",
-        "CustomWin2012R2PSScriptFileName": "[parameters('CustomWin2012R2PSScriptFileName')]"
-    },
+  "variables": {
+    "location": "[parameters('location')]",
+    "newStorageAccountName": "[parameters('newStorageAccountName')]",
+    "newStorageAccountType": "[parameters('newStorageAccountType')]",
+    "adminUsername": "[parameters('adminUsername')]",
+    "adminPassword": "[parameters('adminPassword')]",
+    "windowsOSVersion": "[parameters('WindowsOSVersion')]",
+    "VMName": "[parameters('VMName')]",
+    "VMSize": "[parameters('VMSize')]",
+    "OSDiskName": "[concat(variables('VMName'),'-OSDisk')]",
+    "dataDiskName": "[concat(variables('VMName'),'-dataDisk')]",
+    "vmStorageAccountContainerName": "vhds",
+    "imagePublisher": "MicrosoftWindowsServer",
+    "imageOffer": "WindowsServer",
+    "nicName": "[concat(variables('VMName'), 'NetworkInterface')]",
+    "addressPrefix": "[parameters('addressPrefix')]",
+    "subnetName": "TestVMSubnet",
+    "subnetPrefix": "[parameters('subnetPrefix')]",
+    "vmPublicIPAddressName": "[parameters('vmPublicIPAddressName')]",
+    "virtualNetworkName": "TestVNET",
+    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
+    "CustomWin2012R2PSScriptAzureStorageURI": "[parameters('CustomWin2012R2PSScriptAzureStorageURI')]",
+    "CustomWin2012R2PSScriptFileName": "[parameters('CustomWin2012R2PSScriptFileName')]"
+  },
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
@@ -246,22 +247,44 @@
                     "adminUsername": "[variables('adminUsername')]",
                     "adminPassword": "[variables('adminPassword')]"
                 },
-                "storageProfile": {
-                    "imageReference": {
-                        "publisher": "[variables('imagePublisher')]",
-                        "offer": "[variables('imageOffer')]",
-                        "sku": "[variables('windowsOSVersion')]",
-                        "version": "latest"
-                    },
-                    "osDisk": {
-                        "name": "[variables('OSDiskName')]",
-                        "vhd": {
-                            "uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('OSDiskName'),'.vhd')]"
-                        },
-                        "caching": "ReadWrite",
-                        "createOption": "FromImage"
-                    }
+              "storageProfile": {
+                "imageReference": {
+                  "publisher": "[variables('imagePublisher')]",
+                  "offer": "[variables('imageOffer')]",
+                  "sku": "[variables('windowsOSVersion')]",
+                  "version": "latest"
                 },
+                "osDisk": {
+                  "name": "[variables('OSDiskName')]",
+                  "vhd": {
+                    "uri": "[concat('http://',variables('newStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('OSDiskName'),'.vhd')]"
+                  },
+                  "caching": "ReadWrite",
+                  "createOption": "FromImage"
+                },
+                "dataDisks": [
+                  {
+                    "vhd": {
+                      "uri": "[concat('http://', variables('newStorageAccountName'), '.blob.core.windows.net/vhds', '/', variables('dataDiskName'),'-1.vhd')]"
+                    },
+                    "name": "[concat(variables('dataDiskName'),'-data-disk1')]",
+                    "caching": "None",
+                    "createOption": "empty",
+                    "diskSizeGB": 20,
+                    "lun": 0
+                  },
+                  {
+                    "vhd": {
+                      "uri": "[concat('http://', variables('newStorageAccountName'), '.blob.core.windows.net/vhds', '/', variables('dataDiskName'),'-2.vhd')]"
+                    },
+                    "name": "[concat(variables('dataDiskName'),'-data-disk2')]",
+                    "caching": "None",
+                    "createOption": "empty",
+                    "diskSizeGB": 20,
+                    "lun": 1
+                  }
+                ]
+              },
                 "networkProfile": {
                     "networkInterfaces": [
                         {
